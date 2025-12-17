@@ -1,0 +1,4 @@
+.vscode
+*.o
+webserv
+www/big_video.mp4

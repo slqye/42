@@ -1,0 +1,18 @@
+[project]
+name = "42-leaffliction"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "flake8>=7.3.0",
+    "matplotlib>=3.10.7",
+    "opencv-python>=4.12.0.88",
+    "pandas>=2.3.3",
+    "plantcv>=4.9",
+    "seaborn>=0.13.2",
+    "torch>=2.9.1",
+    "torchvision>=0.24.1",
+    "tqdm>=4.67.1",
+    "typer>=0.20.0",
+]

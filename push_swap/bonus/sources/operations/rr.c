@@ -1,0 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   rr.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: uwywijas <uwywijas@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/03 15:38:26 by uwywijas          #+#    #+#             */
+/*   Updated: 2024/01/12 17:48:19 by uwywijas         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../includes/commons.h"
+#include "../../includes/operations.h"
+#include "../../includes/imports.h"
+
+void	rr(t_list **stack_a, t_list **stack_b)
+{
+	t_list	*holder;
+
+	if (counter(stack_a) <= 1 || counter(stack_b) <= 1)
+		return ;
+	holder = *stack_a;
+	*stack_a = (*stack_a)->next;
+	ft_lstlast(*stack_a)->next = holder;
+	holder->next = NULL;
+	holder = *stack_b;
+	*stack_b = (*stack_b)->next;
+	ft_lstlast(*stack_b)->next = holder;
+	holder->next = NULL;
+}

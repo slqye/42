@@ -1,0 +1,31 @@
+#profile_icon {
+	width: 50%;
+	height: auto;
+
+	border-radius: 100%;
+}
+
+.winrate_value {
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: bold;
+}
+
+.game_icon {
+	width: 5%;
+	height: auto;
+}
+
+.match_game_icons {
+	height: 64%;
+	max-height: 80px;
+	width: auto;
+	border-radius: 100%;
+}
+
+.match_users_icons {
+	height: 50%;
+	max-height: 28px;
+	width: auto;
+	border-radius: 100%;
+}

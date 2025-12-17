@@ -1,0 +1,157 @@
+import sqlalchemy as sqla
+import sqlalchemy.orm as sqlaorm
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import random
+import numpy as np
+
+
+def read_sql_file(path: str) -> str:
+	data: str = ""
+	with open(path, "r") as file:
+		data = file.read().replace("\n", " ")
+	return data
+
+
+def k_means(data: list, k: int, k_center) -> list:
+	data_length = len(data)
+	result = {}
+	# Randomly select k points from the data
+	k_points = random.sample(range(data_length), k)
+	# Convert the indices to actual data points
+	for j in k_points:
+		k_points[k_points.index(j)] = data[j]
+	# Ajusting the k points to be unique and centered
+	for j in range(k_center):
+		# Initialize the state result with empty lists for each k
+		for m in range(k):
+			result[m] = []
+		# Looping through each point in the data
+		for current_point_index in range(data_length):
+			distances = []
+			current_point = data[current_point_index]
+			# Calculate the distance from the current point to each of the k points
+			for kluster in k_points:
+				# Euclidean distance calculation
+				distances.append(((kluster[0] - current_point[0]) ** 2 + (current_point[1] - kluster[1]) ** 2) ** 0.5)
+			# Append the current point to the kluster with the smallest distance
+			result[distances.index(min(distances))].append(current_point_index)
+		# Calculate the new k points as the mean of the points in each kluster
+		for kluster_index in range(len(k_points)):
+			if len(result[kluster_index]) > 0:
+				mean_x = sum([data[index][0] for index in result[kluster_index]]) / len(result[kluster_index])
+				mean_y = sum([data[index][1] for index in result[kluster_index]]) / len(result[kluster_index])
+				k_points[kluster_index] = (mean_x, mean_y)
+	return result, k_points
+
+
+def customers_type_count_chart(data) -> None:
+	df = pd.DataFrame(data, columns=["type", "amount"])
+	df["type"] = df["type"].astype(str)
+	df["amount"] = df["amount"].astype(int)
+	sns.barplot(
+		data=df,
+		x="amount",
+		y="type",
+		hue="type",
+		legend=False
+	)
+	for i, value in enumerate(df["amount"]):
+		plt.text(value + 1, i, str(value), va="center")
+	plt.xlabel("number of customers")
+	plt.ylabel("")
+	plt.show()
+	plt.close()
+
+
+def calculate_average_recency(data: list) -> float:
+	average_days_in_month = 30.44
+	if not data or len(data) < 2:
+		return 0
+	recency_values = [(data[x + 1] - data[x]).days / average_days_in_month for x in range(len(data) - 1)]
+	return sum(recency_values) / len(recency_values)
+
+
+def k_center_chart(data) -> None:
+	processed_data = [(calculate_average_recency(x[0]), x[1], x[2]) for x in data]
+	df = pd.DataFrame(
+		data=processed_data,
+		columns=["recency", "frequency", "total_spend"]
+	)
+	df_means = df[["recency", "frequency"]]
+	k_result = k_means(df_means.values.tolist(), 3, 42)
+	k_values = k_result[0]
+	values = [
+		[
+			np.median([processed_data[index][0] for index in k_values[0]]),
+			np.median([processed_data[index][1] for index in k_values[0]]),
+			round(np.mean([processed_data[index][2] for index in k_values[0]]))
+		],
+		[
+			np.median([processed_data[index][0] for index in k_values[1]]),
+			np.median([processed_data[index][1] for index in k_values[1]]),
+			round(np.mean([processed_data[index][2] for index in k_values[1]]))
+		],
+		[
+			np.median([processed_data[index][0] for index in k_values[2]]),
+			np.median([processed_data[index][1] for index in k_values[2]]),
+			round(np.mean([processed_data[index][2] for index in k_values[2]]))
+		]
+	]
+	values_chart = [x[:2] for x in values]
+	k_df = pd.DataFrame(values_chart, columns=["recency", "frequency"])
+	sns.relplot(
+		data=k_df,
+		x="recency",
+		y="frequency",
+		hue=k_df.index,
+		legend=False,
+		s=500,
+		palette="pastel"
+	)
+	titles = [
+		"Average \"inactive\": ",
+		"Average \"new customer\": ",
+		"Average \"Loyal customers\": "
+	]
+	values_spend = sorted(
+		[(x, values[x][2]) for x in range(len(values))],
+		key=lambda x: x[1]
+	)
+	for i in range(len(values_spend)):
+		real_index = values_spend[i][0]
+		values[real_index].append(titles[i] + f"{values_spend[i][1]}A")
+	for i, (ppm, freq) in enumerate(values_chart):
+		plt.text(ppm, freq + 3, values[i][3], fontsize=12, ha="center", va="bottom")
+	plt.xlabel("Median recency (month)")
+	plt.ylabel("Median frequency")
+	plt.show()
+	plt.close()
+
+
+def get_data(session, sql_file: str) -> list:
+	query = read_sql_file(sql_file)
+	result = session.execute(sqla.text(query))
+	data = result.fetchall()
+	return data
+
+
+def main():
+	try:
+		database = "postgresql://uwywijas:mysecretpassword@localhost:5432/piscineds"
+		engine = sqla.create_engine(database)
+		session = sqlaorm.sessionmaker(bind=engine)()
+		sns.set_theme()
+		customers_type_count_chart(get_data(session, "Clustering.1.sql"))
+		k_center_chart(get_data(session, "Clustering.2.sql"))
+	except Exception as e:
+		print(f"error: {e}")
+		return
+	finally:
+		session.close()
+		engine.dispose()
+
+
+if __name__ == "__main__":
+	main()

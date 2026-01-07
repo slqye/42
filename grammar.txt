@@ -1,0 +1,41 @@
+%token	T_WORD
+%token	T_PIPE
+%token	T_SL_REDIRECTION
+%token	T_SR_REDIRECTION
+%token	T_DL_REDIRECTION
+%token	T_DR_REDIRECTION
+
+command_line:	command NEWLINE
+				| command EOF
+				;
+
+command: 		simple_command piped_command
+				;
+
+piped_command:	T_PIPE simple_command piped_command
+				| void
+				;
+
+simple_command:	command_prefix T_WORD command_suffix
+				| command_prefix T_WORD
+				| command_prefix
+				| T_WORD command_suffix
+				| T_WORD
+				| command_suffix
+				;
+
+command_prefix:	redirect command_prefix
+				| redirect
+				;
+
+command_suffix:	T_WORD command_suffix
+				| T_WORD
+				| redirect command_suffix
+				| redirect
+				;
+
+redirect:		T_SL_REDIRECTION T_WORD
+				| T_SR_REDIRECTION T_WORD
+				| T_DL_REDIRECTION T_WORD
+				| T_DR_REDIRECTION T_WORD
+				;

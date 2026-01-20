@@ -7,14 +7,14 @@ app: typer.Typer = typer.Typer()
 @app.command()
 def main(input: str) -> None:
 	"""
-	Solve a Rubik's Cube.
+	Cli entry to solve a Rubik's Cube.
 	"""
 	cube: rubik.Cube = None
 
 	try:
 		cube = rubik.Cube()
 		for move in input.split(): cube.spin(move)
-		print(f"solution: {' '.join(rubik.Solve.thistlethwaite(cube))}")
+		print(" ".join(rubik.Solve.thistlethwaite(cube)))
 	except Exception as error:
 		print(f"error: {error}", file=sys.stderr)
 

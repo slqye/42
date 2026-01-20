@@ -1,6 +1,4 @@
-from .table import Table
-from .cube import Cube
-from .shuffle import Shuffle
+from . import cube, table
 
 class Solve:
 	"""
@@ -8,11 +6,11 @@ class Solve:
 	"""
 
 	@staticmethod
-	def thistlethwaite(cube: object) -> list:
+	def thistlethwaite(cube: cube.Cube) -> list:
 		"""
 		Solve the cube using Thistlethwaite 4 phases algorithm.
 		"""
-		phases: list = [Table.phase_1, Table.phase_2, Table.phase_3, Table.phase_4]
+		phases: list = [table.Table.phase_1, table.Table.phase_2, table.Table.phase_3, table.Table.phase_4]
 		states: list = []
 		sequences: list = []
 

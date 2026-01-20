@@ -1,3 +1,5 @@
+from . import cube
+
 import collections
 import copy
 import itertools
@@ -13,11 +15,11 @@ class Table:
 	MOVES_G3 = ("U2", "D2", "F2", "B2", "R2", "L2")
 	MSE_SLICES = {"M": (0, 9, 11, 3), "S": (2, 8, 10, 1), "E": (7, 4, 5, 6)}
 
-	def __init__(self, cube: object) -> None:
+	def __init__(self, cube: cube.Cube) -> None:
 		"""
 		Default init function.
 		"""
-		self._cube: object = cube
+		self._cube: cube.Cube = cube
 
 	def compute(self, phase: callable, moves: tuple, output: str) -> None:
 		"""
@@ -36,14 +38,14 @@ class Table:
 				file.write(f"{position} {depth} {moves if len(moves) != 0 else 'E'}\n")
 
 	@staticmethod
-	def phase_1(cube: object) -> int:
+	def phase_1(cube: cube.Cube) -> int:
 		"""
 		Compute phase 1 (g0->g1) cube state.
 		"""
 		return sum(cube._edge_orientations[index] << index for index in range(12))
 
 	@staticmethod
-	def phase_2(cube: object) -> int:
+	def phase_2(cube: cube.Cube) -> int:
 		"""
 		Compute phase 2 (g1->g2) cube state.
 		"""
@@ -60,7 +62,7 @@ class Table:
 		return corners_encoding * 6561 + edges_encoding
 
 	@staticmethod
-	def phase_3(cube: object) -> int:
+	def phase_3(cube: cube.Cube) -> int:
 		"""
 		Compute phase 3 (g2->g3) cube state.
 		"""
@@ -81,7 +83,7 @@ class Table:
 		return corner_encoding * 70 + edges_encoding
 
 	@staticmethod
-	def phase_4(cube: object) -> int:
+	def phase_4(cube: cube.Cube) -> int:
 		"""
 		Compute phase 4 (g3->g4) cube state.
 		"""
@@ -104,7 +106,7 @@ class Table:
 		return corner_rank * 39916800 + edge_rank
 
 	@staticmethod
-	def _bfs(cube: object, phase: callable, moves: list) -> dict:
+	def _bfs(cube: cube.Cube, phase: callable, moves: list) -> dict:
 		"""
 		Generic BFS algorithm.
 		"""

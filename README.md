@@ -13,6 +13,7 @@ Hi! Welcome to my **42** repository. This repository contains all my work from m
 - [multilayer_perceptron](https://github.com/slqye/42/tree/multilayer_perceptron)
 - [inception_of_things](https://github.com/slqye/42/tree/inception_of_things)
 - [leaffliction](https://github.com/slqye/42/tree/leaffliction)
+- [rubik](https://github.com/slqye/42/tree/rubik)
 
 ## Common core projects
 

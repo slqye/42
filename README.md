@@ -15,7 +15,7 @@ uv run sources/main.py --help
 
 ## Explanations
 
-Todo...
+![encoding](assets/encoding.png)
 
 ## Ressources
 

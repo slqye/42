@@ -63,12 +63,10 @@ class Cube:
 		"""
 		display: list[str] = []
 
-		display.append("─" * 10)
 		display.append(f"edge_positions:\t\t{self._edge_positions}")
 		display.append(f"edge_orientations:\t{self._edge_orientations}")
 		display.append(f"corner_positions:\t{self._corner_positions}")
 		display.append(f"corner_orientations:\t{self._corner_orientations}")
-		display.append(f"debug:\t\t\t{self._debug}")
 		return "\n".join(display)
 
 	def spin(self, move: str) -> None:
@@ -82,13 +80,11 @@ class Cube:
 
 		if move not in self.SPINS:
 			raise ValueError(f"Invalid move: \"{move}\"")
-		# Edges
 		for index in range(12):
 			edge_positions_holder[index] = self._edge_positions[self.SPINS_EDGES[move][0][index]]
 			edge_orientations_holder[index] = self._edge_orientations[self.SPINS_EDGES[move][0][index]]
 		for index in self.SPINS_EDGES[move][1]:
 			edge_orientations_holder[index] ^= 1
-		# Corners
 		for index in range(8):
 			corner_positions_holder[index] = self._corner_positions[self.SPINS_CORNERS[move][0][index]]
 			corner_orientations_holder[index] = self._corner_orientations[self.SPINS_CORNERS[move][0][index]]

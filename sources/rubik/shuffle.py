@@ -1,10 +1,22 @@
 import random
 
 class Shuffle:
-	@staticmethod
-	def random(moves: list[str]) -> str:
-		return ' '.join(random.choices(moves, k=random.randint(10, 50)))
+	"""
+	Main class for generating the shuffling state.
+	"""
+	MIN = 10
+	MAX = 25
 
 	@staticmethod
-	def custom(moves: list[str], length: int) -> str:
-		return ' '.join(random.choices(moves, k=length))
+	def random(moves: list) -> list:
+		"""
+		Generate random shuffling state using MIN and MAX.
+		"""
+		return random.choices(moves, k=random.randint(Shuffle.MIN, Shuffle.MAX))
+
+	@staticmethod
+	def custom(moves: list, length: int) -> list:
+		"""
+		Generate random shuffling state using custom input.
+		"""
+		return random.choices(moves, k=length)

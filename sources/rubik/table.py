@@ -1,5 +1,3 @@
-from . import cube
-
 import collections
 import copy
 import itertools
@@ -15,11 +13,11 @@ class Table:
 	MOVES_G3 = ("U2", "D2", "F2", "B2", "R2", "L2")
 	MSE_SLICES = {"M": (0, 9, 11, 3), "S": (2, 8, 10, 1), "E": (7, 4, 5, 6)}
 
-	def __init__(self, cube: cube.Cube) -> None:
+	def __init__(self, cube: object) -> None:
 		"""
 		Default init function.
 		"""
-		self._cube: cube.Cube = cube
+		self._cube: Cube = cube
 
 	def compute(self, phase: callable, moves: tuple, output: str) -> None:
 		"""
@@ -38,20 +36,20 @@ class Table:
 				file.write(f"{position} {depth} {moves if len(moves) != 0 else 'E'}\n")
 
 	@staticmethod
-	def phase_1(cube: cube.Cube) -> int:
+	def phase_1(cube: object) -> int:
 		"""
 		Compute phase 1 (g0->g1) cube state.
 		"""
 		return sum(cube._edge_orientations[index] << index for index in range(12))
 
 	@staticmethod
-	def phase_2(cube: cube.Cube) -> int:
+	def phase_2(cube: object) -> int:
 		"""
 		Compute phase 2 (g1->g2) cube state.
 		"""
 		corners_encoding: int = 0
 		edges_encoding: int = 0
-		edges: list = (0, 3, 9, 11)
+		edges: list = Table.MSE_SLICES["M"]
 
 		for index, i in enumerate(cube._corner_orientations):
 			corners_encoding *= 3
@@ -59,10 +57,10 @@ class Table:
 		for index, i in enumerate(cube._edge_positions):
 			if i in edges:
 				edges_encoding |= (1 << index)
-		return corners_encoding * 6561 + edges_encoding
+		return corners_encoding * 2 ** 12 + edges_encoding
 
 	@staticmethod
-	def phase_3(cube: cube.Cube) -> int:
+	def phase_3(cube: object) -> int:
 		"""
 		Compute phase 3 (g2->g3) cube state.
 		"""
@@ -83,7 +81,7 @@ class Table:
 		return corner_encoding * 70 + edges_encoding
 
 	@staticmethod
-	def phase_4(cube: cube.Cube) -> int:
+	def phase_4(cube: object) -> int:
 		"""
 		Compute phase 4 (g3->g4) cube state.
 		"""
@@ -106,7 +104,7 @@ class Table:
 		return corner_rank * 39916800 + edge_rank
 
 	@staticmethod
-	def _bfs(cube: cube.Cube, phase: callable, moves: list) -> dict:
+	def _bfs(cube: object, phase: callable, moves: list) -> dict:
 		"""
 		Generic BFS algorithm.
 		"""
@@ -120,7 +118,7 @@ class Table:
 		while queue:
 			size = len(queue)
 			depth += 1
-			print(f"\r[{phase.__name__}]: {depth} {len(result.keys())}", end="", flush=True)
+			print(f"\r{phase.__name__}: {depth} {len(result.keys())}", end="", flush=True)
 			for _ in range(size):
 				current_cube = queue.popleft()
 				for move in moves:

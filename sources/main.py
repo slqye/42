@@ -14,7 +14,7 @@ def main(input: str) -> None:
 	try:
 		cube = rubik.Cube()
 		for move in input.split(): cube.spin(move)
-		print(f"solution found: {rubik.Solve.thistlethwaite(cube)}")
+		print(f"solution: {' '.join(rubik.Solve.thistlethwaite(cube))}")
 	except Exception as error:
 		print(f"error: {error}", file=sys.stderr)
 

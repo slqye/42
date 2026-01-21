@@ -51,8 +51,8 @@ Here, the goal is to transition from G0 to G1, ensuring all edges are correctly 
 To represent the edge orientation, each edge is encoded as a bit: `0` for correct orientation and `1` for incorrect orientation.
 A 3x3 cube has 12 edges, so the edge orientation can be represented as a 12-bit binary number.
 This binary number is then converted to a base-10 integer, providing a unique identifier for the cube state in this phase.
-Since there are 12 edges, there are 2^{12} possible states.
-However, due to cube parity constraints, only half of these states are valid, resulting in 2^{11} possible states.
+Since there are 12 edges, there are $2^12$ possible states.
+However, due to cube parity constraints, only half of these states are valid, resulting in $2^11$ possible states.
 
 ![encoding](assets/encoding.png)
 

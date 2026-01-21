@@ -55,7 +55,10 @@ Since there are 12 edges, there are $2^{12}$ possible states.
 However, due to cube parity constraints, only half of these states are valid, resulting in $2^{11}$ possible states.
 
 ### Phase 2
-Todo...
+Here, the goal is to transition from G1 to G2, ensuring that corners are correctly oriented and that the edges `FU`, `FD`, `BU` and `BD` are in there correct slice.
+We need to encode 2 thing here and we can start by encoding corners orientation.
+To do that we can use the same method used in [phase 1](#Phase-1) but because a corner has 3 colors we need to encode it in base 3.
+Because there is 8 corners in a 3x3 cube, that mean that we have $3^{8}$ possible states.
 
 ### Phase 3
 Todo...
@@ -63,7 +66,7 @@ Todo...
 ### Phase 4
 Todo...
 
-### Cube encoding
+### Encoding
 ![encoding](assets/encoding.png)
 
 ## Result

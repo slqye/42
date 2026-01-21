@@ -54,6 +54,16 @@ This binary number is then converted to a base-10 integer, providing a unique id
 Since there are 12 edges, there are $2^{12}$ possible states.
 However, due to cube parity constraints, only half of these states are valid, resulting in $2^{11}$ possible states.
 
+### Phase 2
+Todo...
+
+### Phase 3
+Todo...
+
+### Phase 4
+Todo...
+
+### Cube encoding
 ![encoding](assets/encoding.png)
 
 ## Result

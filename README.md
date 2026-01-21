@@ -13,9 +13,19 @@ The objective was to create a 3x3 Rubik's Cube solver that achieves an average s
 uv run sources/main.py --help
 ```
 
+To make generate lookup tables
+```bash
+uv run -m sources.rubik
+mv phase_*.table ./includes/
+```
+
 ## Explanations
 
 ![encoding](assets/encoding.png)
+
+## Result
+
+In a **5000** cube shuffle, we achieved an average of **30.61** moves, with an average solution time of **0.26** seconds.
 
 ## Ressources
 

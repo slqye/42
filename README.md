@@ -57,7 +57,7 @@ However, due to cube parity constraints, only half of these states are valid, re
 ### Phase 2
 The goal is to transition from G1 to G2, ensuring corners are correctly oriented and that the edges `FU`, `FD`, `BU`, and `BD` are in their correct slices.
 Two pieces of information must be encoded here. First, we will encode corner orientation.
-The method is similar to [Phase 1](#Phase-1), but since a corner has three faces, base 3 is used.
+The method is similar to [phase 1](#phase-1), but since a corner has three faces, base 3 is used.
 A 3×3 cube has 8 corners, resulting in $3^{7}$ possible states.
 Next, edge positions are encoded.
 A 12-bit binary number is used (since there are 12 edges), with a bit set to `1` if the edge is in the correct slice.
@@ -65,21 +65,22 @@ To combine these two encodings, the first is multiplied by the number of possibl
 This results in $3^{7} * \binom{12}{4}$ possible cube states for this phase.
 
 ### Phase 3
-The goal is to transition from G2 to G3, ensuring all corners are in their correct orbits and the remaining edges are in their correct slices (MSE).
-Since I didn't fully understand Mr. Thistlethwaite's encoding method, I decided to "brute force" this part.
-This involves encoding every possible corner permutation, resulting in 8! possibilities.
-As in Phase 2, edge positions must also be encoded.
-With 8 edges remaining, the number of possibilities is $\binom{8}{4}$.
-This gives a total of $8! * \binom{8}{4}$ possible states for this phase.
-
 > [!NOTE]
 > This step can be optimized by precomputing the 96 corner permutations of the cube.
 > Initializing the BFS queue with these states reduces the maximum number of moves required in the lookup table.
+> Also, take a look at [Stefan Pochmann alternative](https://www.stefan-pochmann.info/spocc/other_stuff/tools/solver_thistlethwaite/solver_thistlethwaite.txt).
+
+The goal is to transition from G2 to G3, ensuring all corners are in their correct orbits and the remaining edges are in their correct slices (MSE).
+Since I didn't fully understand Mr. Thistlethwaite's encoding method, I decided to "brute force" this part.
+This involves encoding every possible corner permutation, resulting in 8! possibilities.
+As in [phase 2](#phase-2), edge positions must also be encoded.
+With 8 edges remaining, the number of possibilities is $\binom{8}{4}$.
+This gives a total of $8! * \binom{8}{4}$ possible states for this phase.
 
 ### Phase 4
-This is the final phase,going from G3 to G4, where the goal is simply to solve the cube.
+This is the final phase, going from G3 to G4, where the goal is simply to solve the cube.
 This is achieved by encoding both corner and edge permutations using binomial ranking.
-There are only 96 possible corner positions in G3 and 6912 edge positions, resulting in $96 × 6912$ possible states.
+There are only 96 possible corner positions in G3 and 6912 edge positions, resulting in $96 * 6912$ possible states.
 
 ### Encoding
 To apply rotation to the cube, we created a set of indices for each edge and corner.
@@ -95,8 +96,6 @@ In a **5000** cube shuffle, we achieved an average of **30.61** moves, with an a
 [Thistlethwaite base paper](https://www.jaapsch.net/puzzles/thistle.htm)
 
 [Drew Finnis implementation](https://github.com/dfinnis/Rubik/tree/master)
-
-[Stefan Pochmann implementation](https://www.stefan-pochmann.info/spocc/other_stuff/tools/solver_thistlethwaite/solver_thistlethwaite.txt)
 
 [Quassnoi implementation](https://explainextended.com/2022/12/31/happy-new-year-14/)
 

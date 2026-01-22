@@ -1,5 +1,3 @@
-from .table import Table
-
 class Cube:
 	"""
 	Main class that represent a rubik's cube and perform operations.

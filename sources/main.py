@@ -12,9 +12,9 @@ def main(input: str) -> None:
 	cube: rubik.Cube = None
 
 	try:
-		cube = rubik.Cube()
+		cube = rubik.cube.Cube()
 		for move in input.split(): cube.spin(move)
-		print(" ".join(rubik.Solve.thistlethwaite(cube)))
+		print(" ".join(rubik.solve.thistlethwaite(cube)))
 	except Exception as error:
 		print(f"error: {error}", file=sys.stderr)
 

@@ -9,7 +9,7 @@ def main(input: str) -> None:
 	"""
 	Cli entry to solve a Rubik's Cube.
 	"""
-	cube: rubik.Cube = None
+	cube: rubik.cube.Cube = None
 
 	try:
 		cube = rubik.cube.Cube()

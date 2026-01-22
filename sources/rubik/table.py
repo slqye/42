@@ -69,15 +69,15 @@ class Table:
 				moves = "".join(self._table[key][1][::-1])
 				file.write(f"{position} {depth} {moves if len(moves) != 0 else 'E'}\n")
 
-def phase_1(cube: object) -> int:
+def phase_0(cube: object) -> int:
 	"""
-	Compute phase 1 (g0->g1) cube state.
+	Compute phase 0 (g0->g1) cube state.
 	"""
 	return sum(cube._edge_orientations[index] << index for index in range(12))
 
-def phase_2(cube: object) -> int:
+def phase_1(cube: object) -> int:
 	"""
-	Compute phase 2 (g1->g2) cube state.
+	Compute phase 1 (g1->g2) cube state.
 	"""
 	corners_encoding: int = 0
 	edge_encodings: int = 0
@@ -89,9 +89,9 @@ def phase_2(cube: object) -> int:
 			edge_encodings |= (1 << index)
 	return corners_encoding * 2 ** 12 + edge_encodings
 
-def phase_3(cube: object) -> int:
+def phase_2(cube: object) -> int:
 	"""
-	Compute phase 3 (g2->g3) cube state.
+	Compute phase 2 (g2->g3) cube state.
 	"""
 	edge_configuration: list = [x for x in cube._edge_positions if x not in MSE_SLICES["M"]]
 	corner_lengths: int = len(cube._corner_positions)
@@ -110,9 +110,9 @@ def phase_3(cube: object) -> int:
 	edge_encodings = combinations.index(tuple(i for i in range(8) if edge_encodings & (1 << i)))
 	return corner_encodings * 70 + edge_encodings
 
-def phase_4(cube: object) -> int:
+def phase_3(cube: object) -> int:
 	"""
-	Compute phase 4 (g3->g4) cube state.
+	Compute phase 3 (g3->g4) cube state.
 	"""
 	corner_lengths: int = len(cube._corner_positions)
 	edge_lengths: int = len(cube._edge_positions)

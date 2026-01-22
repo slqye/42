@@ -16,7 +16,6 @@ uv run sources/main.py --help
 To generate lookup tables
 ```bash
 uv run -m sources.rubik
-mv phase_*.table ./includes/
 ```
 
 ## Explanations

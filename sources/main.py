@@ -7,7 +7,7 @@ app: typer.Typer = typer.Typer()
 @app.command()
 def main(input: str) -> None:
 	"""
-	Cli entry to solve a Rubik's Cube.
+	Cli entry to solve a 3x3 Rubik's cube.
 	"""
 	cube: rubik.cube.Cube = None
 

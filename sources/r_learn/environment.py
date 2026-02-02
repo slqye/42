@@ -18,17 +18,17 @@ class SnakeEnvironment(Environment):
 	def __init__(self, size: int) -> None:
 		assert size >= 10, "size can't be less than 10"
 
-		self._size: int = size
+		self._size: int = size + 1
 		self.board: list[list[str]] = [
 			[
 				self.EMPTY
-				if x_index != 0 and x_index != size
+				if x_index != 0 and x_index != self._size - 1
 				else self.WALL
-				for x_index in range(self._size + 1)
+				for x_index in range(self._size)
 			]
-			if y_index != 0 and y_index != size
-			else [self.WALL] * (self._size + 1)
-			for y_index in range(self._size + 1)
+			if y_index != 0 and y_index != self._size - 1
+			else [self.WALL] * (self._size)
+			for y_index in range(self._size)
 		]
 
 		self.spawn(self.SNAKE_HEAD)

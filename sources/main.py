@@ -1,9 +1,11 @@
-import r_learn.agent as rl_agent
-import r_learn.environment as rl_env
+from r_learn.environment import SnakeEnvironment
+from r_learn.interpreter import SnakeInterpreter
+from r_learn.agent import SnakeAgent
 
 def main():
-	configuration: object = rl_env.Snake.Configuration((10, 10), 2, 1, rl_agent.Basic())
-	board = rl_env.Snake(configuration)
+	environment: SnakeEnvironment = SnakeEnvironment(10)
+	interpreter: SnakeInterpreter = SnakeInterpreter(environment)
+	agent: SnakeAgent = SnakeAgent(interpreter)
 
 if __name__ == "__main__":
 	main()

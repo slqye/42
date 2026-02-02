@@ -20,8 +20,15 @@ class SnakeEnvironment(Environment):
 
 		self._size: int = size
 		self.board: list[list[str]] = [
-			[self.EMPTY for _ in range(self._size)]
-			for _ in range(self._size)
+			[
+				self.EMPTY
+				if x_index != 0 and x_index != size
+				else self.WALL
+				for x_index in range(self._size + 1)
+			]
+			if y_index != 0 and y_index != size
+			else [self.WALL] * (self._size + 1)
+			for y_index in range(self._size + 1)
 		]
 
 		self.spawn(self.SNAKE_HEAD)
@@ -29,9 +36,10 @@ class SnakeEnvironment(Environment):
 			self.spawn(self.GREEN_APPLE)
 		for _ in range(self.GREEN_APPLE_COUNT):
 			self.spawn(self.RED_APPLE)
+		print(self)
 
 	def __str__(self) -> None:
-		display: list[str] = ["".join(row) for row in self.board]
+		display: list[str] = [str(row) for row in self.board]
 
 		return "\n".join(display)
 

@@ -14,6 +14,7 @@ Hi! Welcome to my **42** repository. This repository contains all my work from m
 - [inception_of_things](https://github.com/slqye/42/tree/inception_of_things)
 - [leaffliction](https://github.com/slqye/42/tree/leaffliction)
 - [rubik](https://github.com/slqye/42/tree/rubik)
+- [learn2slither](https://github.com/slqye/42/tree/learn2slither)
 
 ## Common core projects
 

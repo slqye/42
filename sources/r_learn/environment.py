@@ -16,8 +16,6 @@ class SnakeEnvironment(Environment):
 	RED_APPLE_COUNT		= 1
 
 	def __init__(self, size: int) -> None:
-		assert size >= 10, "size can't be less than 10"
-
 		self._size: int = size + 1
 		self.board: list[list[str]] = [
 			[
@@ -36,7 +34,6 @@ class SnakeEnvironment(Environment):
 			self.spawn(self.GREEN_APPLE)
 		for _ in range(self.GREEN_APPLE_COUNT):
 			self.spawn(self.RED_APPLE)
-		print(self)
 
 	def __str__(self) -> None:
 		display: list[str] = [str(row) for row in self.board]

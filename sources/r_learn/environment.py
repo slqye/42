@@ -16,7 +16,9 @@ class SnakeEnvironment(Environment):
 	RED_APPLE_COUNT		= 1
 
 	def __init__(self, size: int) -> None:
-		self._size: int = size + 1
+		assert size >= 2, "size can't be less than 2."
+
+		self._size: int = size + 2
 		self.board: list[list[str]] = [
 			[
 				self.EMPTY
@@ -32,7 +34,7 @@ class SnakeEnvironment(Environment):
 		self.spawn(self.SNAKE_HEAD)
 		for _ in range(self.GREEN_APPLE_COUNT):
 			self.spawn(self.GREEN_APPLE)
-		for _ in range(self.GREEN_APPLE_COUNT):
+		for _ in range(self.RED_APPLE_COUNT):
 			self.spawn(self.RED_APPLE)
 
 	def __str__(self) -> None:

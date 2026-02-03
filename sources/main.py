@@ -7,5 +7,7 @@ def main():
 	interpreter: SnakeInterpreter = SnakeInterpreter(environment)
 	agent: SnakeAgent = SnakeAgent(interpreter)
 
+	print(environment)
+
 if __name__ == "__main__":
 	main()

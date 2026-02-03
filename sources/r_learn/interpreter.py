@@ -4,13 +4,12 @@ class Interpreter(abc.ABC):
 	@abc.abstractmethod
 	def compute_state(self):
 		pass
-	
 
 class SnakeInterpreter(Interpreter):
 	def __init__(self, environment: object) -> None:
 		self.environment = environment
 
-	def compute_state(self) -> tuple[str, str, str, str]:
+	def compute_state(self) -> str:
 		snake_position: tuple[int, int] = self._get_snake_position()
 		x_axis: tuple = self.environment.board[snake_position[0]]
 		y_axis: tuple = tuple([x[snake_position[1]] for x in self.environment.board])
@@ -19,8 +18,8 @@ class SnakeInterpreter(Interpreter):
 		result.append(x_axis[:snake_position[1]])
 		result.append(x_axis[snake_position[1] + 1:])
 		result.append(y_axis[snake_position[0] + 1:])
-		result.append(y_axis[:snake_position[0]])
-		return (x for x in result)
+		result.append(y_axis[:snake_position[0]][::-1])
+		return "".join(("".join(x) for x in result))
 
 	def _get_snake_position(self) -> tuple[int, int]:
 		for row in range(self.environment._size):

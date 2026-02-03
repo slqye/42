@@ -1,5 +1,6 @@
 import abc
 import random
+import logging
 
 class Environment(abc.ABC):
 	pass
@@ -39,6 +40,7 @@ class SnakeEnvironment(Environment):
 		self._snake: list = []
 
 		self._snake.append(self.spawn(self.SNAKE_HEAD))
+		self._snake.append(self._snake[-1])
 		for _ in range(self.GREEN_APPLE_COUNT):
 			self.spawn(self.GREEN_APPLE)
 		for _ in range(self.RED_APPLE_COUNT):
@@ -53,6 +55,7 @@ class SnakeEnvironment(Environment):
 		cells: list[tuple[int, int]] = self._get_board_empty_cells()
 		position: list[int, int] = random.choice(cells)
 
+		logging.info(f"spawning {spawned} on board")
 		self.board[position[0]][position[1]] = spawned
 		return position
 
@@ -66,6 +69,7 @@ class SnakeEnvironment(Environment):
 
 		if self.running is False:
 			return
+		logging.info(moves[action].__name__)
 		self.board[self._snake[-1][0]][self._snake[-1][1]] = self.EMPTY
 		self._action_hook(moves[action])
 		if self.running:
@@ -80,8 +84,10 @@ class SnakeEnvironment(Environment):
 				self.running = False
 			case self.GREEN_APPLE:
 				self._snake.append(self._snake[-1])
+				self.spawn(self.GREEN_APPLE)
 			case self.RED_APPLE:
 				self._snake.pop()
+				self.spawn(self.RED_APPLE)
 				if len(self._snake) == 0:
 					self.running = False
 
@@ -89,7 +95,7 @@ class SnakeEnvironment(Environment):
 		self.board[self._snake[-1][0]][self._snake[-1][1]] = self.EMPTY
 		for index, snake in enumerate(reversed(self._snake)):
 			if index != len(self._snake) - 1:
-				self._snake[index] = self._snake[index - 1]
+				self._snake[len(self._snake) - index - 1] = self._snake[len(self._snake) - index - 2]
 		for index, snake in enumerate(self._snake):
 			if index != 0:
 				self.board[snake[0]][snake[1]] = self.SNAKE_BODY

@@ -55,7 +55,7 @@ class SnakeEnvironment(Environment):
 		cells: list[tuple[int, int]] = self._get_board_empty_cells()
 		position: list[int, int] = random.choice(cells)
 
-		logging.info(f"spawning {spawned} on board")
+		logging.debug(f"spawning {spawned} on board")
 		self.board[position[0]][position[1]] = spawned
 		return position
 
@@ -69,11 +69,14 @@ class SnakeEnvironment(Environment):
 
 		if self.running is False:
 			return
-		logging.info(moves[action].__name__)
+		logging.debug(moves[action].__name__)
 		self.board[self._snake[-1][0]][self._snake[-1][1]] = self.EMPTY
 		self._action_hook(moves[action])
 		if self.running:
 			self._update_snake()
+
+	def get_snake_length(self) -> int:
+		return len(self._snake) - 1
 
 	def _action_hook(self, action: callable) -> None:
 		action()

@@ -37,8 +37,6 @@ class Environment:
 
 		actions[action]()
 		self._action_hook()
-		if self.state == True:
-			self.board.update(self.snake)
 
 	def _action_hook(self) -> None:
 		snake_position: list[int] = self.snake.state[0]
@@ -50,10 +48,18 @@ class Environment:
 			self.state = False
 		elif cell == self.board.config["encoding"]["apple_green"]:
 			self.snake.grow()
+			self.board.update(self.snake)
+			self.spawn(self.board.config["encoding"]["apple_green"])
 		elif cell == self.board.config["encoding"]["apple_red"]:
-			self.snake.shrink()
-			if self.snake.length == 0:
+			self.board.update(self.snake)
+			if self.snake.length - 1 == 0:
 				self.state = False
+			else:
+				self.snake.shrink()
+				self.board.update(self.snake)
+				self.spawn(self.board.config["encoding"]["apple_red"])
+		else:
+			self.board.update(self.snake)
 
 class Board:
 	def __init__(self, config: dict) -> None:

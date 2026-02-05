@@ -33,10 +33,7 @@ class SnakeInterpreter(Interpreter):
 
 	@staticmethod
 	def _get_reward_farness(environment, vision: str) -> int:
-		farness: int = 0
-
 		for index, cell in enumerate(vision):
 			if cell == environment.config["board"]["encoding"]["apple_green"]:
-				farness = index + 1
-				break
-		return farness
+				return index + 1
+		return 0

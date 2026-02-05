@@ -1,14 +1,31 @@
+import abc
 import random
 
-class Environment:
+class Environment(abc.ABC):
+	def __init__(self, config: dict) -> None:
+		self.config: dict = config
+
+	@property
+	@abc.abstractmethod
+	def action_space(self) -> int:
+		pass
+
+	@abc.abstractmethod
+	def action(self, action: int) -> None:
+		pass
+
+
+class SnakeEnvironment(Environment):
+	ACTION_SPACE = 4
 	EVENT_NOTHING = 0
 	EVENT_DIE = 1
 	EVENT_GROW = 2
 	EVENT_SHRINK = 3
 
 	def __init__(self, config: dict) -> None:
-		self.board: Board = Board(config["board"])
-		self.snake: Snake = Snake(config["snake"])
+		super().__init__(config)
+		self.board: SnakeBoard = SnakeBoard(self.config["board"])
+		self.snake: Snake = Snake(self.config["snake"])
 		self.state: bool = True
 		self.event: int = self.EVENT_NOTHING
 		self._snake_start: list[int] = None
@@ -22,9 +39,12 @@ class Environment:
 	def __str__(self) -> str:
 		display: list[str] = []
 
-		display.append(self.snake.__str__())
 		display.append(self.board.__str__())
 		return "\n".join(display)
+
+	@property
+	def action_space(self) -> int:
+		return self.ACTION_SPACE
 
 	def spawn(self, spawned: str) -> list[int]:
 		cell: list[int, int] = self.board.get_spawnable_cell()
@@ -73,7 +93,7 @@ class Environment:
 			self.event = self.EVENT_NOTHING
 			self.board.update(self.snake)
 
-class Board:
+class SnakeBoard:
 	def __init__(self, config: dict) -> None:
 		self.config: dict = config
 		self.state: list[list[str]] = []
@@ -90,9 +110,9 @@ class Board:
 				self.state[row].append(self.config["encoding"]["empty"])
 
 	def __str__(self) -> str:
-		display: list[str] = [str(row) for row in self.state]
+		display: list[str] = [row for row in self.state]
 
-		return "\n".join(display)
+		return "\n".join(["".join(row) for row in display])
 
 	def update(self, snake: object) -> None:
 		for row in range(self.config["size"]):

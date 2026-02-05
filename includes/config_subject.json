@@ -1,14 +1,14 @@
 {
 	"environment": {
 		"board": {
-			"size": 5,
+			"size": 10,
 			"encoding": {
-				"wall": "⬛",
-				"empty": "⬜",
-				"apple_green": "🍏",
-				"apple_red": "🍎",
-				"snake_head": "🐍",
-				"snake_body": "🟩"
+				"wall": "W",
+				"empty": "0",
+				"apple_green": "G",
+				"apple_red": "R",
+				"snake_head": "H",
+				"snake_body": "S"
 			},
 			"consumables": {
 				"apple_green": 2,

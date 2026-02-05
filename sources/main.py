@@ -1,31 +1,22 @@
 import logging
+import json
 
-from r_learn.environment import SnakeEnvironment
-from r_learn.interpreter import SnakeInterpreter
-from r_learn.agent import SnakeAgent
+from learn2slither.environment import Environment
+from learn2slither.interpreter import Interpreter
+from learn2slither.agent import Agent
 
-logging.basicConfig(format="[%(asctime)s] [%(levelname)s]: %(message)s", level=logging.INFO)
+def compute_config(path: str) -> dict:
+	with open(path, "r") as file:
+		return json.load(file)
 
-EPOCHS = 10000
+def main(path: str = "./includes/config.json", epochs: int = 1000):
+	config: dict = compute_config(path)
+	environment: Environment = Environment(config["environment"])
 
-def main():
-	q_table_holder: dict = None
-
-	for epoch in range(EPOCHS):
-		environment: SnakeEnvironment = SnakeEnvironment(10)
-		interpreter: SnakeInterpreter = SnakeInterpreter(environment)
-		agent: SnakeAgent = SnakeAgent(interpreter)
-		if q_table_holder is not None:
-			agent._q_table = q_table_holder
-		moves: int = 0
-		while environment.running:
-			agent.perform_action(environment)
-			agent.mesure_reward(environment)
-			agent.update_q_table(environment)
-			moves += 1
-		logging.info(f"[{epoch + 1}/{EPOCHS}]: {environment.get_snake_length()}, {moves}")
-		q_table_holder = agent._q_table
-
+	print(environment)
+	environment.action(0)
+	print(environment)
 
 if __name__ == "__main__":
+	logging.basicConfig(format="[%(asctime)s] [%(levelname)s]: %(message)s", level=logging.INFO)
 	main()

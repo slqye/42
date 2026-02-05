@@ -15,11 +15,12 @@ class SnakeInterpreter(Interpreter):
 		y_axis: tuple = tuple([x[snake_position[1]] for x in self.environment.board])
 		result: list  = []
 
-		result.append(x_axis[:snake_position[1]])
-		result.append(x_axis[snake_position[1] + 1:])
-		result.append(y_axis[snake_position[0] + 1:])
-		result.append(y_axis[:snake_position[0]][::-1])
-		return "".join(("".join(x) for x in result))
+		result.append(x_axis[snake_position[1] - 1])
+		result.append(x_axis[snake_position[1] + 1])
+		result.append(y_axis[snake_position[0] - 1])
+		result.append(y_axis[snake_position[0] + 1])
+		result.append(str(self.environment._snake_direction))
+		return "".join(result)
 
 	def _get_snake_position(self) -> tuple[int, int]:
 		for row in range(self.environment._size):

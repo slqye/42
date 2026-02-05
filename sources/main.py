@@ -16,7 +16,7 @@ def main(path: str = "./includes/config_default.json"):
 
 	for epoch in range(config["agent"]["epochs"]):
 		logging.info(f"epoch {epoch + 1}/{config['agent']['epochs']}")
-		environment: Environment = Environment(config["environment"])
+		environment = Environment(config["environment"])
 		for _ in agent.learn(environment):
 			continue
 

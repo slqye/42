@@ -2,28 +2,19 @@ import abc
 
 class Interpreter(abc.ABC):
 	@abc.abstractmethod
-	def compute_state(self):
+	def compute_state(environment: object) -> str:
 		pass
 
 class SnakeInterpreter(Interpreter):
-	def __init__(self, environment: object) -> None:
-		self.environment = environment
-
-	def compute_state(self) -> str:
-		snake_position: tuple[int, int] = self._get_snake_position()
-		x_axis: tuple = self.environment.board[snake_position[0]]
-		y_axis: tuple = tuple([x[snake_position[1]] for x in self.environment.board])
+	@staticmethod
+	def compute_state(environment: object) -> str:
+		snake_position: tuple[int, int] = environment.snake.position
+		row: list[str] = environment.board.state[snake_position[0]]
+		column: list[str] = [row[snake_position[1]] for row in environment.board.state]
 		result: list  = []
 
-		result.append(x_axis[snake_position[1] - 1])
-		result.append(x_axis[snake_position[1] + 1])
-		result.append(y_axis[snake_position[0] - 1])
-		result.append(y_axis[snake_position[0] + 1])
-		result.append(str(self.environment._snake_direction))
+		result.append(row[snake_position[1] - 1])
+		result.append(column[snake_position[0] - 1])
+		result.append(row[snake_position[1] + 1])
+		result.append(column[snake_position[0] + 1])
 		return "".join(result)
-
-	def _get_snake_position(self) -> tuple[int, int]:
-		for row in range(self.environment._size):
-			for column in range(self.environment._size):
-				if self.environment.board[row][column] == self.environment.SNAKE_HEAD:
-					return (row, column)

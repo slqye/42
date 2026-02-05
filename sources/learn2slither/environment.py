@@ -1,10 +1,16 @@
 import random
 
 class Environment:
+	EVENT_NOTHING = 0
+	EVENT_DIE = 1
+	EVENT_GROW = 2
+	EVENT_SHRINK = 3
+
 	def __init__(self, config: dict) -> None:
 		self.board: Board = Board(config["board"])
 		self.snake: Snake = Snake(config["snake"])
 		self.state: bool = True
+		self.event: int = self.EVENT_NOTHING
 		self._snake_start: list[int] = None
 
 		for consumable, number in self.board.config["consumables"].items():
@@ -43,22 +49,28 @@ class Environment:
 		cell: str = self.board.state[snake_position[0]][snake_position[1]]
 
 		if cell == self.board.config["encoding"]["wall"]:
+			self.event = self.EVENT_DIE
 			self.state = False
 		elif cell == self.board.config["encoding"]["snake_body"]:
+			self.event = self.EVENT_DIE
 			self.state = False
 		elif cell == self.board.config["encoding"]["apple_green"]:
+			self.event = self.EVENT_GROW
 			self.snake.grow()
 			self.board.update(self.snake)
 			self.spawn(self.board.config["encoding"]["apple_green"])
 		elif cell == self.board.config["encoding"]["apple_red"]:
 			self.board.update(self.snake)
 			if self.snake.length - 1 == 0:
+				self.event = self.EVENT_DIE
 				self.state = False
 			else:
+				self.event = self.EVENT_SHRINK
 				self.snake.shrink()
 				self.board.update(self.snake)
 				self.spawn(self.board.config["encoding"]["apple_red"])
 		else:
+			self.event = self.EVENT_NOTHING
 			self.board.update(self.snake)
 
 class Board:
@@ -115,6 +127,10 @@ class Snake:
 		display.append(str(self.state))
 		display.append(str(self.length))
 		return " ".join(display)
+
+	@property
+	def position(self) -> list[int]:
+		return self.state[0]
 
 	@property
 	def length(self) -> int:

@@ -5,12 +5,12 @@ from learn2slither.environment import Environment
 from learn2slither.interpreter import Interpreter, SnakeInterpreter
 from learn2slither.agent import Agent
 
-def compute_config(path: str) -> dict:
-	with open(path, "r") as file:
+def compute_config(config_path: str) -> dict:
+	with open(config_path, "r") as file:
 		return json.load(file)
 
-def main(path: str = "./includes/config_default.json"):
-	config: dict = compute_config(path)
+def main(config_path: str = "./includes/config_default.json"):
+	config: dict = compute_config(config_path)
 	agent: Agent = Agent(config["agent"], SnakeInterpreter())
 	environment: Environment = None
 

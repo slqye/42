@@ -9,12 +9,13 @@ def compute_config(path: str) -> dict:
 	with open(path, "r") as file:
 		return json.load(file)
 
-def main(path: str = "./includes/config.json", epochs: int = 1000):
+def main(path: str = "./includes/config_default.json"):
 	config: dict = compute_config(path)
 	agent: Agent = Agent(config["agent"], SnakeInterpreter())
 	environment: Environment = None
 
 	for epoch in range(config["agent"]["epochs"]):
+		logging.info(f"epoch {epoch + 1}/{config['agent']['epochs']}")
 		environment: Environment = Environment(config["environment"])
 		for _ in agent.learn(environment):
 			continue

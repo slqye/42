@@ -1,7 +1,7 @@
 {
 	"environment": {
 		"board": {
-			"size": 5,
+			"size": 7,
 			"encoding": {
 				"wall": "⬛",
 				"empty": "⬜",

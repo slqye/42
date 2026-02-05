@@ -13,8 +13,11 @@ def main(path: str = "./includes/config.json", epochs: int = 1000):
 	config: dict = compute_config(path)
 	environment: Environment = Environment(config["environment"])
 
-	print(environment)
-	environment.action(0)
+	while environment.state is True:
+		print(environment)
+		user_input = int(input("action: "))
+		if user_input == 4: break
+		environment.action(user_input)
 	print(environment)
 
 if __name__ == "__main__":

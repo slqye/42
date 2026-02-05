@@ -139,6 +139,6 @@ class Snake:
 		self.state.pop()
 
 	def update(self, position: list[int]) -> None:
-		for index in range(len(self.state) - 1):
-			self.state[index + 1] = self.state[index]
+		for index in range(len(self.state) - 1, 0, -1):
+			self.state[index] = self.state[index - 1]
 		self.state[0] = position

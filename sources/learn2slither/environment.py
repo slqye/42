@@ -35,6 +35,8 @@ class SnakeEnvironment(Environment):
 				self.spawn(self.board.config["encoding"][consumable])
 		self._snake_start = self.spawn(self.board.config["encoding"]["snake_head"])
 		self.snake.state.append(self._snake_start)
+		for _ in range(self.snake.config["length"] - 1):
+			self.snake.grow()
 
 	def __str__(self) -> str:
 		display: list[str] = []

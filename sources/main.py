@@ -20,9 +20,9 @@ def get_parser() -> object:
 		help="path to a configuration file"
 	)
 	parser.add_argument(
-		"--model",
+		"--load",
 		metavar="path",
-		help="intialise the agent with a custom model"
+		help="load a model and init the agent with it"
 	)
 	parser.add_argument(
 		"--train",
@@ -31,7 +31,7 @@ def get_parser() -> object:
 		help="train an agent with a number of epoch and a saving_path"
 	)
 	parser.add_argument(
-		"--display",
+		"--simulation",
 		default="shell",
 		choices=["shell", "windowed", "none"],
 		help="display a simulation of the agent"
@@ -43,11 +43,16 @@ def get_config(config_path: str) -> dict:
 		return json.load(file)
 
 def train(config: dict, agent: Agent, epochs: int, saving_path: str) -> None:
+	environment: Environment = None
+
 	logging.info(f"training model with {epochs} epochs")
 	for epoch in range(epochs):
 		logging.debug(f"training: {epoch}/{epochs}")
-		for _ in agent.learn(SnakeEnvironment(config["environment"])):
-			continue
+		environment = SnakeEnvironment(config["environment"])
+		for _ in agent.learn(environment):
+			# Todo: argument to enable display
+			simulation.shell_training(environment, f"{epoch}/{epochs}", 0.0001)
+		print()
 	logging.info(f"saving model to {saving_path}")
 	agent.save(saving_path)
 
@@ -59,11 +64,11 @@ def main():
 	try:
 		config = get_config(parser.config)
 		agent = Agent(config["agent"], SnakeInterpreter())
-		if parser.model:
-			agent.load(parser.model)
+		if parser.load:
+			agent.load(parser.load)
 		if parser.train:
 			train(config, agent, int(parser.train[0]), parser.train[1])
-		match parser.display:
+		match parser.simulation:
 			case "shell":
 				simulation.shell(agent, SnakeEnvironment(config["environment"]), 0.1)
 			case "none":

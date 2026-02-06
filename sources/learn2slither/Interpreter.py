@@ -31,8 +31,17 @@ class SnakeInterpreter(IInterpreter):
 		return "".join(result)
 
 	@staticmethod
-	def _get_reward_farness(environment, vision: str) -> int:
+	def _get_reward_farness(environment: object, vision: str) -> int:
+		farness: int = 0
+		step = round(environment.config["board"]["size"] / 3)
+
 		for index, cell in enumerate(vision):
 			if cell == environment.config["board"]["encoding"]["apple_green"]:
+				farness = index + 1
+				break
+		for index in range(2):
+			if farness > index * step and farness <= (index + 1) * step:
 				return index + 1
-		return 0
+		if farness != 0:
+			return 3
+		return farness

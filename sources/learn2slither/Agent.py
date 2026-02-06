@@ -5,30 +5,28 @@ class Agent:
 	def __init__(self, config: dict, interpreter: object) -> None:
 		self.config: dict = config
 		self.interpreter = interpreter
+		self._epsilon: float = self.config["epsilon"]
 		self._q_table: dict = {}
 
 	def learn(self, environment: object) -> bool:
 		state: str = None
-		greed: float = self.config["epsilon"]
 		action: int = 0
 
 		while environment.state is True:
 			state = self._get_state(environment)
-			action = self._perform_action(environment, state, greed)
+			action = self._perform_action(environment, state, self._epsilon)
 			self._update_q_table(environment, state, action, environment.reward)
-			greed -= self.config["epsilon_decay"]
+			self._epsilon *= (1 - self.config["epsilon_decay"])
 			yield False
 		yield True
 
 	def play(self, environment: object) -> bool:
 		state: str = None
-		greed: float = 0
 		action: int = 0
-		reward: int = 0
 
 		while environment.state is True:
 			state = self._get_state(environment)
-			action = self._perform_action(environment, state, greed)
+			action = self._perform_action(environment, state, 0)
 			yield False
 		yield True
 
@@ -47,13 +45,13 @@ class Agent:
 			self._q_table[state] = [0.0] * environment.action_space
 		return state
 
-	def _perform_action(self, environment: object, state: str, greed: float) -> int:
+	def _perform_action(self, environment: object, state: str, epsilon: float) -> int:
 		q_values: list[float] = self._q_table[state]
 		q_value: float = max(q_values)
 		best_actions: list[float] = None
 		action: int = 0
 
-		if random.random() < greed:
+		if random.random() < epsilon:
 			action = random.randint(0, environment.action_space - 1)
 		else:
 			best_actions = [index for index, action in enumerate(q_values) if action == q_value]

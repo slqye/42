@@ -1,0 +1,35 @@
+{
+	"environment": {
+		"board": {
+			"size": 12,
+			"encoding": {
+				"wall": "W",
+				"empty": "0",
+				"apple_green": "G",
+				"apple_red": "R",
+				"snake_head": "H",
+				"snake_body": "S"
+			},
+			"consumables": {
+				"apple_green": 2,
+				"apple_red": 1
+			}
+		},
+		"snake": {
+			"length": 3
+		},
+		"rewards": {
+			"nothing": -0.01,
+			"die": -10,
+			"grow": 1,
+			"shrink": -1
+		}
+	},
+	"agent": {
+		"learning_rate": 0.1,
+		"epsilon": 1,
+		"epsilon_decay": 0.001,
+		"gamma": 0.95,
+		"precision": 5
+	}
+}

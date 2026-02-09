@@ -5,7 +5,7 @@ import json
 from learn2slither.Environment import IEnvironment, SnakeEnvironment
 from learn2slither.Interpreter import IInterpreter, SnakeInterpreter
 from learn2slither.Agent import Agent
-from learn2slither import display
+from learn2slither.Display import IDisplay, WindowedDisplay, ShellDisplay
 
 def get_parser() -> object:
 	parser: object = argparse.ArgumentParser(
@@ -46,6 +46,12 @@ def get_parser() -> object:
 		type=bool
 	)
 	parser.add_argument(
+		"--visual-type",
+		default="shell",
+		choices=["shell", "windowed"],
+		type=str
+	)
+	parser.add_argument(
 		"--visual-tick",
 		default=0.1,
 		type=float
@@ -70,6 +76,8 @@ def get_config(config_path: str) -> dict:
 
 def run(config: dict, agent: Agent, parser: object) -> None:
 	environment: Environment = None
+	agent_learn_map: dict = {True: agent.learn, False: agent.play}
+	display: IDisplay = None
 	benchmark: dict = {
 		"max_duration": 0,
 		"mean_duration": 0,
@@ -77,17 +85,17 @@ def run(config: dict, agent: Agent, parser: object) -> None:
 		"mean_length": 0
 	}
 
+	if parser.visual_type:
+		if parser.visual_type == "shell":
+			display = ShellDisplay(parser.visual_tick)
+		else:
+			display = WindowedDisplay(parser.visual_tick)
 	for epoch in range(parser.epochs):
 		logging.debug(f"training: {epoch + 1}/{parser.epochs}")
 		environment = SnakeEnvironment(config["environment"])
-		if parser.learn:
-			for _ in agent.learn(environment):
-				if parser.visual:
-					display.shell(environment, parser.visual_tick)
-		else:
-			for _ in agent.play(environment):
-				if parser.visual:
-					display.shell(environment, parser.visual_tick)
+		for _ in agent_learn_map[parser.learn](environment):
+			if parser.visual:
+				display.show(environment)
 		if environment.snake.moves > benchmark["max_duration"]:
 			benchmark["max_duration"] = environment.snake.moves
 		if environment.snake.length > benchmark["max_length"]:
@@ -95,7 +103,7 @@ def run(config: dict, agent: Agent, parser: object) -> None:
 		benchmark["mean_duration"] += environment.snake.moves / parser.epochs
 		benchmark["mean_length"] += environment.snake.length / parser.epochs
 	if parser.visual:
-		print()
+		display.close()
 	if parser.benchmark:
 		print("[benchmark]")
 		for key, value in benchmark.items():

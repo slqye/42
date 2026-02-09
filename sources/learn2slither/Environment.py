@@ -155,6 +155,7 @@ class Snake:
 	def __init__(self, config: dict):
 		self.config: dict = config
 		self.state: list[tuple[int, int]] = []
+		self.moves: int = 0
 
 	def __str__(self) -> str:
 		display: list[str] = []
@@ -172,15 +173,19 @@ class Snake:
 		return len(self.state)
 
 	def move_left(self):
+		self.moves += 1
 		self.update([self.state[0][0], self.state[0][1] - 1])
 
 	def move_up(self):
+		self.moves += 1
 		self.update([self.state[0][0] - 1, self.state[0][1]])
 
 	def move_right(self):
+		self.moves += 1
 		self.update([self.state[0][0], self.state[0][1] + 1])
 	
 	def move_down(self):
+		self.moves += 1
 		self.update([self.state[0][0] + 1, self.state[0][1]])
 
 	def grow(self) -> None:

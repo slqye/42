@@ -5,7 +5,7 @@ import json
 from learn2slither.Environment import IEnvironment, SnakeEnvironment
 from learn2slither.Interpreter import IInterpreter, SnakeInterpreter
 from learn2slither.Agent import Agent
-from learn2slither import simulation
+from learn2slither import display
 
 def get_parser() -> object:
 	parser: object = argparse.ArgumentParser(
@@ -83,11 +83,11 @@ def run(config: dict, agent: Agent, parser: object) -> None:
 		if parser.learn:
 			for _ in agent.learn(environment):
 				if parser.visual:
-					simulation.shell(environment, parser.visual_tick)
+					display.shell(environment, parser.visual_tick)
 		else:
 			for _ in agent.play(environment):
 				if parser.visual:
-					simulation.shell(environment, parser.visual_tick)
+					display.shell(environment, parser.visual_tick)
 		if environment.snake.moves > benchmark["max_duration"]:
 			benchmark["max_duration"] = environment.snake.moves
 		if environment.snake.length > benchmark["max_length"]:

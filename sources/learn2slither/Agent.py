@@ -16,8 +16,8 @@ class Agent:
 			state = self._get_state(environment)
 			action = self._perform_action(environment, state, self._epsilon)
 			self._update_q_table(environment, state, action, environment.reward)
-			self._epsilon *= (1 - self.config["epsilon_decay"])
 			yield False
+		self._epsilon *= (1 - self.config["epsilon_decay"])
 		yield True
 
 	def play(self, environment: object) -> bool:
@@ -26,7 +26,7 @@ class Agent:
 
 		while environment.state is True:
 			state = self._get_state(environment)
-			action = self._perform_action(environment, state, 0)
+			action = self._perform_action(environment, state, 0.001)
 			yield False
 		yield True
 
@@ -65,7 +65,6 @@ class Agent:
 		new_state: str = None
 		target: float = reward
 
-		# Todo: fix selecting bias
 		if environment.state is True:
 			new_state = self._get_state(environment)
 			target += self.config["gamma"] * max(self._q_table[new_state])

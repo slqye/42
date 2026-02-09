@@ -31,6 +31,8 @@ class SnakeEnvironment(IEnvironment):
 		self.event: int = self.EVENT_NOTHING
 		self._snake_start: list[int] = None
 
+		if config["board"]["size"] < 4:
+			raise Exception("board size too small")
 		for consumable, number in self.board.config["consumables"].items():
 			for _ in range(number):
 				self.spawn(self.board.config["encoding"][consumable])

@@ -14,27 +14,53 @@ def get_parser() -> object:
 	)
 
 	parser.add_argument(
-		"--config",
+		"config",
 		default="./includes/configs/default.json",
-		metavar="path",
-		help="path to a configuration file"
+		type=str
 	)
 	parser.add_argument(
 		"--load",
-		metavar="path",
-		help="load a model and init the agent with it"
+		type=str
 	)
 	parser.add_argument(
-		"--train",
-		nargs=2,
-		metavar=("epochs", "path"),
-		help="train an agent with a number of epoch and a saving_path"
+		"--learn",
+		default=False,
+		action=argparse.BooleanOptionalAction,
+		type=bool
 	)
 	parser.add_argument(
-		"--simulation",
-		default="shell",
-		choices=["shell", "windowed", "none"],
-		help="display a simulation of the agent"
+		"--epochs",
+		default=1,
+		type=int
+	)
+
+	parser.add_argument(
+		"--save",
+		default="./includes/models/model.json",
+		type=str
+	)
+	parser.add_argument(
+		"--visual",
+		default=False,
+		action=argparse.BooleanOptionalAction,
+		type=bool
+	)
+	parser.add_argument(
+		"--visual-tick",
+		default=0.1,
+		type=float
+	)
+	parser.add_argument(
+		"--benchmark",
+		default=False,
+		action=argparse.BooleanOptionalAction,
+		type=bool
+	)
+	parser.add_argument(
+		"--debug",
+		default=False,
+		action=argparse.BooleanOptionalAction,
+		type=bool
 	)
 	return parser.parse_args()
 
@@ -42,37 +68,55 @@ def get_config(config_path: str) -> dict:
 	with open(config_path, "r") as file:
 		return json.load(file)
 
-def train(config: dict, agent: Agent, epochs: int, saving_path: str) -> None:
+def run(config: dict, agent: Agent, parser: object) -> None:
 	environment: Environment = None
+	benchmark: dict = {
+		"max_duration": 0,
+		"mean_duration": 0,
+		"max_length": 0,
+		"mean_length": 0
+	}
 
-	logging.info(f"training model with {epochs} epochs")
-	for epoch in range(epochs):
-		logging.debug(f"training: {epoch}/{epochs}")
+	for epoch in range(parser.epochs):
+		logging.debug(f"training: {epoch + 1}/{parser.epochs}")
 		environment = SnakeEnvironment(config["environment"])
-		for _ in agent.learn(environment):
-			# Todo: argument to enable display
-			simulation.shell_training(environment, f"{epoch}/{epochs}", 0.0001)
+		if parser.learn:
+			for _ in agent.learn(environment):
+				if parser.visual:
+					simulation.shell(environment, parser.visual_tick)
+		else:
+			for _ in agent.play(environment):
+				if parser.visual:
+					simulation.shell(environment, parser.visual_tick)
+		if environment.snake.moves > benchmark["max_duration"]:
+			benchmark["max_duration"] = environment.snake.moves
+		if environment.snake.length > benchmark["max_length"]:
+			benchmark["max_length"] = environment.snake.length
+		benchmark["mean_duration"] += environment.snake.moves / parser.epochs
+		benchmark["mean_length"] += environment.snake.length / parser.epochs
+	if parser.visual:
 		print()
-	logging.info(f"saving model to {saving_path}")
-	agent.save(saving_path)
+	if parser.benchmark:
+		print("[benchmark]")
+		for key, value in benchmark.items():
+			print(f"- {key}: {round(value, 2)}")
+	if parser.learn and parser.save:
+		logging.debug(f"saving agent model to {parser.save}")
+		agent.save(parser.save)
 
 def main():
 	parser: object = get_parser()
 	confif: str = None
 	agent: Agent = None
 
+	if parser.debug:
+		logging.getLogger().setLevel(logging.DEBUG)
 	try:
 		config = get_config(parser.config)
 		agent = Agent(config["agent"], SnakeInterpreter())
 		if parser.load:
 			agent.load(parser.load)
-		if parser.train:
-			train(config, agent, int(parser.train[0]), parser.train[1])
-		match parser.simulation:
-			case "shell":
-				simulation.shell(agent, SnakeEnvironment(config["environment"]), 0.1)
-			case "none":
-				return
+		run(config, agent, parser)
 	except Exception as error:
 		logging.error(error)
 

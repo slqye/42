@@ -91,7 +91,7 @@ def run(config: dict, agent: Agent, parser: object) -> None:
 		else:
 			display = WindowedDisplay(parser.visual_tick)
 	for epoch in range(parser.epochs):
-		logging.debug(f"training: {epoch + 1}/{parser.epochs}")
+		logging.debug(f"epoch: {epoch + 1}/{parser.epochs}")
 		environment = SnakeEnvironment(config["environment"])
 		for _ in agent_learn_map[parser.learn](environment):
 			if parser.visual:

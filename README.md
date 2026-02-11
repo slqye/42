@@ -15,6 +15,7 @@ Hi! Welcome to my **42** repository. This repository contains all my work from m
 - [leaffliction](https://github.com/slqye/42/tree/leaffliction)
 - [rubik](https://github.com/slqye/42/tree/rubik)
 - [learn2slither](https://github.com/slqye/42/tree/learn2slither)
+- [total_perspective_vortex](https://github.com/slqye/42/tree/total_perspective_vortex)
 
 ## Common core projects
 

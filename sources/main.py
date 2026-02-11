@@ -75,7 +75,7 @@ def get_config(config_path: str) -> dict:
 		return json.load(file)
 
 def run(config: dict, agent: Agent, parser: object) -> None:
-	environment: Environment = None
+	environment: IEnvironment = None
 	agent_learn_map: dict = {True: agent.learn, False: agent.play}
 	display: IDisplay = None
 	benchmark: dict = {
@@ -114,7 +114,7 @@ def run(config: dict, agent: Agent, parser: object) -> None:
 
 def main():
 	parser: object = get_parser()
-	confif: str = None
+	config: str = None
 	agent: Agent = None
 
 	if parser.debug:

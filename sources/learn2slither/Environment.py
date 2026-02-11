@@ -66,7 +66,7 @@ class SnakeEnvironment(IEnvironment):
 	def spawn(self, spawned: str) -> list[int]:
 		cell: list[int, int] = self.board.get_spawnable_cell()
 
-		if cell != None:
+		if cell is not None:
 			self.board.state[cell[0]][cell[1]] = spawned
 		return cell
 
@@ -185,14 +185,14 @@ class Snake:
 	def move_right(self):
 		self.moves += 1
 		self.update([self.state[0][0], self.state[0][1] + 1])
-	
+
 	def move_down(self):
 		self.moves += 1
 		self.update([self.state[0][0] + 1, self.state[0][1]])
 
 	def grow(self) -> None:
 		self.state.append(self.state[-1])
-	
+
 	def shrink(self) -> None:
 		self.state.pop()
 

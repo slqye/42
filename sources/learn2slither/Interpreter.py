@@ -18,7 +18,7 @@ class SnakeInterpreter(IInterpreter):
 			row[snake_position[1] + 1:],
 			column[snake_position[0] + 1:]
 		]
-		result: list  = []
+		result: list = []
 
 		result.append(row[snake_position[1] - 1])
 		result.append(str(SnakeInterpreter._get_reward_farness(environment, visions[0])))

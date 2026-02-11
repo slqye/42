@@ -22,11 +22,10 @@ class Agent:
 
 	def play(self, environment: object) -> bool:
 		state: str = None
-		action: int = 0
 
 		while environment.state is True:
 			state = self._get_state(environment)
-			action = self._perform_action(environment, state, 0.001)
+			self._perform_action(environment, state, 0.001)
 			yield False
 		yield True
 

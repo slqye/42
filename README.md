@@ -1,6 +1,6 @@
 # 42
 
-Hi! Welcome to my **42** repository. This repository contains all my work from my 42 journey. I hope it will be useful.
+Welcome to my **42** repository. This repository contains all my work from my 42 journey. I hope it will be useful.
 
 ## Advanced projects
 

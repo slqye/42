@@ -16,6 +16,6 @@ uv run sources/main.py --help
 
 ## Result
 
-In a 10x10 board with **1000** sessions, the AI agent average a length of **24.32** and has got a maximum length of **54**.
+In a 10x10 board with **1000** sessions, the AI agent averaged a length of **24.32** and achieved a maximum length of **54**.
 
 ![display](assets/display.gif)

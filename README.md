@@ -1,7 +1,8 @@
 # learn2slither
 
 Hi! This is my 42 cursus project, learn2slither.
-The objective was to create a snake AI that can achieve at least 10 of size in a 10x10 board 50% of the time.
+The objective was to create a snake AI that can achieve at least 10 of size in a 10x10 board 50% of the time
+using Q-learning reinforcement learning algorithm.
 
 ## Usage
 
